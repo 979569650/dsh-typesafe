@@ -8,6 +8,10 @@ node_modules/
 .env.*
 _*.mjs
 
+# Never commit a registry credential. A publish token lives here only for the
+# duration of one `npm publish` and is deleted immediately afterwards.
+.npmrc
+
 # Editor and OS noise.
 .DS_Store
 Thumbs.db
