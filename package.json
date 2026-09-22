@@ -1,0 +1,89 @@
+{
+  "name": "dsh-typesafe",
+  "version": "0.1.0",
+  "description": "TypeSafe Jev (System One decision model) for DeepSeek Harness: typed decisions in three question primitives, confidence-gated routing, a cost meter, and an automatic prompt-injection guard over untrusted tool results.",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": "./lib/index.js",
+    "./client": "./lib/client.js",
+    "./config": "./lib/config.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "lib/",
+    "cordis.patch.yml",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node test/smoke.mjs && node test/wiring.mjs && node test/locale.mjs && node test/guard-coverage.mjs && node test/truncation-bypass.mjs && node test/screen-coverage.mjs && node test/notice-forgery.mjs && node test/compaction-survives.mjs",
+    "test:runtime": "node test/runtime.mjs",
+    "test:client": "node scripts/check-client.mjs",
+    "test:security": "node test/truncation-bypass.mjs && node test/screen-coverage.mjs && node test/notice-forgery.mjs && node test/guard-coverage.mjs",
+    "test:long-context": "node test/compaction-survives.mjs",
+    "test:all": "node test/smoke.mjs && node test/wiring.mjs && node test/runtime.mjs && node test/locale.mjs && node test/guard-coverage.mjs && node test/truncation-bypass.mjs && node test/screen-coverage.mjs && node test/notice-forgery.mjs && node test/compaction-survives.mjs && node scripts/check-client.mjs",
+    "test:live": "node test/live.mjs",
+    "install:profile": "node scripts/install.mjs",
+    "uninstall:profile": "node scripts/install.mjs --uninstall",
+    "key:set": "node scripts/set-key.mjs",
+    "key:status": "node scripts/set-key.mjs --status",
+    "key:unset": "node scripts/set-key.mjs --unset",
+    "audit:session": "node scripts/audit-session.mjs",
+    "audit:call": "node scripts/inspect-typesafe-call.mjs",
+    "audit:dump": "node scripts/dump-call.mjs",
+    "audit:guard": "node scripts/guard-coverage.mjs",
+    "audit:section": "node scripts/show-section.mjs",
+    "audit:evidence": "node scripts/prompt-evidence.mjs",
+    "audit:growth": "node scripts/context-growth.mjs",
+    "audit:drift": "node scripts/section-drift.mjs",
+    "audit:long-context": "node scripts/long-context-risk.mjs"
+  },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "typesafe",
+    "jev",
+    "system-one",
+    "decision",
+    "guardrail"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/979569650/dsh-typesafe.git"
+  },
+  "homepage": "https://github.com/979569650/dsh-typesafe#readme",
+  "bugs": {
+    "url": "https://github.com/979569650/dsh-typesafe/issues"
+  },
+  "engines": {
+    "node": "^22.19.0 || >=24.0.0"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes"
+      ]
+    },
+    "compatibility": {
+      "dshReleases": {
+        "0.1.5-rc.2": "compatible"
+      }
+    }
+  },
+  "dependencies": {
+    "@deepseek-ai/schemastery": "^3.18.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.2",
+    "@deepseek-ai/dsh-tools": "^0.1.5-rc.2",
+    "@deepseek-ai/dsh-credentials": "^0.1.5-rc.2",
+    "@deepseek-ai/dsh-system-prompt": "^0.1.5-rc.2",
+    "@deepseek-ai/dsh-launch-environment": "^0.1.5-rc.2"
+  }
+}

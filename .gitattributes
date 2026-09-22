@@ -1,0 +1,10 @@
+# The plugin is authored with LF. Normalize on checkout so a Windows clone and a
+# Linux clone produce the same bytes — the patch file and the test expectations
+# are both sensitive to line endings.
+* text=auto eol=lf
+
+# Binary-ish assets, if any are ever added.
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary

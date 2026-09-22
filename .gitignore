@@ -1,0 +1,16 @@
+# The junction `scripts/install.mjs` creates so this package can resolve the
+# harness's own modules from the profile. Machine-specific; never committed.
+node_modules/
+
+# Local runs of the audit scripts and live tests.
+*.log
+.env
+.env.*
+_*.mjs
+
+# Editor and OS noise.
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp

@@ -1,0 +1,56 @@
+# dsh-typesafe bundle patch: one row inserted over whatever layers came before it.
+#
+# The row loads `lib/index.js` as the host half (a plain Cordis plugin) and the
+# package's `dsh.client` declaration makes the web app load `./client` as the
+# browser half (the settings card that owns the API key).
+#
+# A patch replaces the targeted row's whole `config`, so a profile overriding
+# this row must restate every key it wants to keep. Every key below also has a
+# schema default in lib/config.js, so the row may be trimmed to `id` + `name`
+# and still behave identically; the explicit values are here so a reader sees
+# the shipped defaults without opening the source.
+- insert:
+    - id: dsh-typesafe
+      name: dsh-typesafe
+      config:
+        enabled: true
+        # Resolved per request through ctx.credentials: the inherited
+        # environment, then $DSH_HOME/.credentials.yaml (where the settings
+        # card below writes it), then the .env fallbacks.
+        apiKeyEnv: TYPESAFE_API_KEY
+        baseURL: https://api.typesafe.ai
+        model: jev-latest
+        timeoutMs: 30000
+        maxStateChars: 60000
+        # Jev bills per input token; output tokens are free. Used only for the
+        # cost figure reported back with each call.
+        inputPricePerMTok: 0.042
+        promptEnabled: true
+        # 700 = the behavioural-rule band (TEAM_POLICY 600 .. PTC_ONLY 800), not
+        # the tool catalogue. The shipped default was 2750, which measured at
+        # offset 10653 of a 17377-character prompt — mid-context, where an
+        # instruction is most likely to be skimmed. See DEFAULT_PROMPT_ORDER.
+        promptOrder: 700
+        # The automatic guard screens untrusted tool results through Jev before
+        # the model reads them. Fail-open: any error leaves the result untouched.
+        #
+        # Entries are globs. Keep this list generous: a deployment's tool set is
+        # assembled from plugins, and the first field test found the guard missing
+        # `read_page` entirely — the agent fetched a page through it and no notice
+        # was ever emitted. The plugin now warns at startup about any registered
+        # tool that looks like a content ingestor and is not covered here, so a
+        # gap shows up in the log instead of going unnoticed.
+        guardEnabled: true
+        guardTools:
+          - web_fetch
+          - web_search
+          - read_page
+          - read_url
+          - browse
+          - scrape
+          - 'mcp__*__fetch'
+          - 'mcp__*__fetch_content'
+          - '*fetch_content'
+        guardWarnThreshold: 0.5
+        guardMinChars: 200
+        guardMaxChars: 6000
